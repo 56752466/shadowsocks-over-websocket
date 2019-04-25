@@ -1,5 +1,5 @@
 # shadowsocks-over-websocket
-基于 [shadowsocks](https://zh.wikipedia.org/zh-cn/Shadowsocks) 协议的翻墙工具 , 可部署在 [Heroku](https://www.heroku.com/) 平台上 , 实现免费科学上网
+基于 [shadowsocks](https://zh.wikipedia.org/zh-cn/Shadowsocks) 协议的科学上网工具 , 可部署在 [Heroku](https://www.heroku.com/) 平台上 , 实现免费科学上网
 
 
 ## 如何部署在 Heroku 平台上
@@ -42,7 +42,9 @@
 ![6](./imgs/6.png)
 Setting 页面 ==> Reveal Config Vars
 
-需要配置 METHOD(加密方法)，PASSWORD(密码，推荐使用`aes-256-cfb`)，SERVER_ADDRESS(`0.0.0.0`) 三个环境变量，支持以下加密方法:
+配置三个环境变量：METHOD(加密方法) aes-256-cfb，PASSWORD(密码），SERVER_ADDRESS(`0.0.0.0`) 
+
+支持以下加密方法:
 
 * rc4
 * rc4-md5
@@ -65,25 +67,58 @@ Setting 页面 ==> Reveal Config Vars
 ## 启动客户端：
 
 ### 命令行启动:
-1. 安装 [nodejs](https://nodejs.org/en/download/) 和 [git](https://git-scm.com/downloads)
-2. 执行 `git clone https://github.com/VincentChanX/shadowsocks-over-websocket.git` 命令
-1. **进到本项目目录**，执行`npm install` 命令
-2. 执行 `node local.js -s app名称.herokuapp.com -l 1080 -m 设置的加密算法 -k 设置的密码 -p 80` 命令，启动成功
 
+1）本地安装 git：https://git-scm.com/downloads
 
-## Chrome 浏览器配置
-1. 下载 [Chrome](http://www.google.cn/chrome/browser/desktop/index.html) 浏览器插件 [SwitchyOmega](https://github.com/VincentChanX/shadowsocks-over-websocket/raw/master/extensions/SwitchyOmega.crx)
+2）本地安装 node
 
-2. 安装 SwitchyOmega 插件：打开浏览器的扩展程序页面 [chrome://extensions](chrome://extensions)，把SwitchyOmega.crx文件拖放到浏览器扩展程序页面安装
+```
+brew install node
+```
 
-3. 新建情景模式 `local-proxy`，配置 SwitchyOmega ：`代理协议：SOCKS5 代理服务器：127.0.0.1 代理端口：1080`，如下图：
-![7](./imgs/7.png)
+3）克隆项目
 
-4. 配置 `auto switch` 情景模式，添加规则列表网址: <https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt> 并更新情景模式，规则列表规则处的情景模式选中为上一步创建的 `local-proxy` ，配置如下图:
-![8](./imgs/8.png)
+```
+git clone https://github.com/VincentChanX/shadowsocks-over-websocket.git ~/
+```
 
+4）进入目录
 
-5. 选中 `auto switch` 情景模式:
-![9](./imgs/9.png)
+```
+cd ~/shadowsocks-over-websocket
+```
 
-6. 现在你就可以科学上网了
+5）安装插件
+
+```
+npm install
+```
+
+6）打开 Shadowsocks 客户端
+
+新增或切换到 heroku 节点：地址 127.0.0.1，端口 1080，加密方法如上，密码如上
+
+7）杀掉 shadowsocks 本地 socks5 进程
+
+每次提示端口占用，都要杀掉一次
+
+```
+kill -9 $(lsof -i tcp:1086 -t)
+```
+
+8）开启服务
+
+如图查看本地 shadowsocks 客户端的 Socks5 端口，比如图片是 1086
+
+![](https://i.loli.net/2019/04/25/5cc171e2410b2.png)
+
+```
+node local.js -s vpnxxx.herokuapp.com -l 你的Socks5端口 -m 设置的加密方法 -k 设置的密码 -p 80
+
+# 比如我的
+node local.js -s vpn999.herokuapp.com -l 1086 -m aes-256-cfb -k Qq112233 -p 80
+```
+
+** 完成以上配置后，以后只需重复 4）6）7）8） 四步即可进行科学上网，打开 https://www.google.com 试试。 ** 
+
+PS：刚开始连接时 heroku 还处于睡眠状态，会比较慢。
