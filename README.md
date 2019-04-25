@@ -116,7 +116,7 @@ kill -9 $(lsof -i tcp:1086 -t)
 node local.js -s vpnxxx.herokuapp.com -l 你的Socks5端口 -m 设置的加密方法 -k 设置的密码 -p 80
 
 # 比如我的
-node local.js -s vpn999.herokuapp.com -l 1086 -m aes-256-cfb -k Qq112233 -p 80
+node local.js -s vpn999.herokuapp.com -l 1086 -m aes-256-cfb -k 设置的加密方法 -p 80
 ```
 
 ** 完成以上配置后，以后只需重复 4）6）7）8） 四步即可进行科学上网，打开 https://www.google.com 试试。 ** 
